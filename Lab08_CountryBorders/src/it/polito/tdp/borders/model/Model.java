@@ -25,7 +25,7 @@ public class Model {
 		b = new BordersDAO();
 		nazioni = new ArrayList <Country>();
 		confini = new ArrayList <Border>();
-		this.grafo = new SimpleGraph<Country, Border> (Border.class);
+		
 	}
 	
 	
@@ -42,6 +42,8 @@ public class Model {
 
 	//per stamparlo?
 	public void createGraph(int anno){
+		
+		this.grafo = new SimpleGraph<Country, Border> (Border.class);
 		
 		// creo i vertici
 		for( Border b : this.getCoppie(anno)){
@@ -73,6 +75,9 @@ public class Model {
 	}
 	
 	public Map <Country, Integer> getCountryCounts(){
+		if(grafo == null){
+			throw new RuntimeException("Grafo non esistente");
+		}
 		Map <Country, Integer> mappa = new HashMap <Country, Integer>();
 		for(Country c : grafo.vertexSet()){
 			mappa.put(c, grafo.degreeOf(c));
@@ -81,6 +86,9 @@ public class Model {
 	}
 	
 	public Integer getNumberOfConnectedComponents(){
+		if(grafo == null){
+			throw new RuntimeException("Grafo non esistente");
+		}
 		ConnectivityInspector <Country, Border> connessioni = new ConnectivityInspector <Country, Border>(grafo);
 		return connessioni.connectedSets().size();
 	}
